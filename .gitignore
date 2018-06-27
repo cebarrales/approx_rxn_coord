@@ -1,0 +1,5 @@
+README-GIT.txt
+examples_sextic/
+examples_quartic/
+__pycache__/
+.DS_Store
