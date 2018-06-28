@@ -18,12 +18,11 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 #
 # --
-"Class for parsing data from FCHK file"
+""""Class for parsing data from FCHK file"""
 
 import numpy as np
 from numpy import matrix
 import sys
-
 
 
 class FCHKFile(object):
@@ -34,7 +33,7 @@ class FCHKFile(object):
        command, lot (level of theory) and basis.
     """
 
-    def __init__(self, filename:str, ignore_errors:bool=False, field_labels=None):
+    def __init__(self, filename: str, ignore_errors: bool = False, field_labels=None):
         """
            Arguments:
             | ``filename``  --  The formatted checkpoint file
@@ -70,12 +69,12 @@ class FCHKFile(object):
         """
 
         # if fields is None, all fields are read
-        def read_field(f):
+        def read_field(file):
             """Read a single field"""
             datatype = None
             while datatype is None:
                 # find a sane header line
-                line = f.readline()
+                line = file.readline()
                 if line == "":
                     return False
 
@@ -114,7 +113,7 @@ class FCHKFile(object):
                 counter = 0
                 try:
                     while counter < length:
-                        line = f.readline()
+                        line = file.readline()
                         if line == "":
                             raise FileFormatError(
                                 "Unexpected end of formatted checkpoint file %s"
@@ -219,14 +218,14 @@ def force_constant(r, r_1, p_1, p):
     coord_p = matrix(x_p.get_coordinates())
     dcoord_r = coord_r_1 - coord_r
     dcoord_p = coord_p - coord_p_1
-    k_r = (dcoord_r * hessian_r * dcoord_r.T)/(dcoord_r * dcoord_r.T)
-    k_p = (dcoord_p * hessian_p * dcoord_p.T)/(dcoord_p * dcoord_p.T)
-    return float(k_r),float(k_p)
+    k_r = (dcoord_r * hessian_r * dcoord_r.T) / (dcoord_r * dcoord_r.T)
+    k_p = (dcoord_p * hessian_p * dcoord_p.T) / (dcoord_p * dcoord_p.T)
+    return float(k_r), float(k_p)
 
 
 def ts_force_constant(ts_file):
     """ Read TS force constant from .log file of a TS calculation """
-    f = open(ts_file,"r")
+    f = open(ts_file, "r")
     fc = []
     for line in f:
         if "Frc consts  --" in line:
